@@ -37,6 +37,8 @@ RUN php5enmod mcrypt
 RUN echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf \
 	&& a2enconf fqdn
 
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+
 EXPOSE 22
 EXPOSE 80
 EXPOSE 443
