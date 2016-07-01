@@ -1,0 +1,38 @@
+mag_intro_mysql_data:
+  container_name: mag_intro_mysql_data
+  build: mysql_data
+
+mag_intro_mysql:
+  container_name: mag_intro_mysql
+  build: mysql
+  environment:
+    - MYSQL_DATABASE=magento_app
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=123
+    - MYSQL_ROOT_PASSWORD=123
+  volumes_from:
+    - mag_intro_mysql_data
+
+mag_intro_phpmyadmin:
+  container_name: mag_intro_phpmyadmin  
+  image: nazarpc/phpmyadmin
+  ports:
+    - 2346:80
+  links:
+    - mag_intro_mysql:mysql
+
+mag_intro_web:
+  build: web
+  container_name: mag_intro_web 
+  ports:
+    - 8075:80
+  environment:
+    - MYSQL_DATABASE=magento_app
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=123
+    - MYSQL_ROOT_PASSWORD=123
+  links:
+    - mag_intro_mysql
+  volumes:
+    - ../app/:/var/www/html
+    - ./logs/apache2:/var/log/apache2
