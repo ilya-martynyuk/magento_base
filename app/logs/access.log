@@ -1,4 +1,0 @@
-127.0.0.1 - - [01/Jul/2016:10:11:29 +0300] "GET / HTTP/1.1" 200 502 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36"
-127.0.0.1 - - [01/Jul/2016:10:11:29 +0300] "GET /favicon.ico HTTP/1.1" 200 501 "http://magento_intro.local/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36"
-127.0.0.1 - - [01/Jul/2016:10:12:58 +0300] "GET / HTTP/1.1" 200 502 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36"
-127.0.0.1 - - [01/Jul/2016:10:12:58 +0300] "GET /favicon.ico HTTP/1.1" 200 501 "http://magento_intro.local/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36"
