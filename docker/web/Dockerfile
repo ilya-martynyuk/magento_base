@@ -1,46 +1,33 @@
-FROM ubuntu:15.10
+FROM php:5.6-apache
 
 MAINTAINER Ilya Martynyuk <i.martynyuk@insign.ch>
 
-ENV APACHE_SERVERNAME docker-android-schweiz.ch
-ENV APACHE_SERVERADMIN admin@localhost
-ENV APACHE_DOCUMENTROOT /var/www
-ENV APACHE_RUN_USER www-data
-ENV APACHE_RUN_GROUP www-data
-ENV APACHE_LOG_DIR /var/log/apache2
-ENV APACHE_PID_FILE /var/run/apache2.pid
-ENV APACHE_RUN_DIR /var/run/apache2
-ENV APACHE_LOCK_DIR /var/lock/apache2
 
-RUN apt-get update && apt-get install -y \
-    php5 \
-    libapache2-mod-php5 \
-    php5-intl \
-    php-pear \
-    php5-mcrypt \
-    php5-sqlite \
-    php5-xsl \
-    php5-cli \
-    php5-tidy \
-    php5-gd \
-    php5-json \
-    php5-curl \
-    php5-mysql \
-    mysql-client \
-    vim
+RUN requirements="libpng12-dev libjpeg-dev libjpeg62-turbo libmcrypt4 libmcrypt-dev libcurl3-dev libxml2-dev libxslt-dev libicu-dev libicu52" \
+    && apt-get update && apt-get install -y $requirements && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-configure gd --with-jpeg-dir=/usr/lib \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install mcrypt \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install soap \
+    && docker-php-ext-install xsl \
+    && docker-php-ext-install intl \
+    && requirementsToRemove="libpng12-dev libjpeg-dev libmcrypt-dev libcurl3-dev libxml2-dev libxslt-dev libicu-dev" \
+    && apt-get purge --auto-remove -y $requirementsToRemove
 
-RUN sed -i "s/;always_populate_raw_post_data = -1/always_populate_raw_post_data = -1/" /etc/php5/apache2/php.ini
+RUN curl -sSL https://getcomposer.org/composer.phar -o /usr/bin/composer \
+    && chmod +x /usr/bin/composer \
+    && apt-get update && apt-get install -y zlib1g-dev git && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install zip \
+    && apt-get purge -y --auto-remove zlib1g-dev \
+    && composer selfupdate
 
+RUN sed -i "s/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www/" /etc/apache2/apache2.conf \
+    && rm -rf /var/www/html
+
+WORKDIR /var/www
+
+RUN usermod -u 1000 www-data
+RUN chown -R www-data:www-data /var/www
 RUN a2enmod rewrite
-RUN php5enmod mcrypt
-
-RUN echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf \
-	&& a2enconf fqdn
-
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
-EXPOSE 22
-EXPOSE 80
-EXPOSE 443
-
-CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]

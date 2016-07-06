@@ -34,5 +34,5 @@ mag_intro_web:
   links:
     - mag_intro_mysql
   volumes:
-    - ../app/:/var/www/html
+    - ../app/:/var/www
     - ./logs/apache2:/var/log/apache2
