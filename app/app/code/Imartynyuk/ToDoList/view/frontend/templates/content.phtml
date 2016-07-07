@@ -1,0 +1,13 @@
+<?php
+
+$toDoList = $this->getToDoList();
+
+?>
+
+<h1>It works!</h1>
+
+<ul>
+    <?php foreach ($toDoList as $item): ?>
+        <li><?php echo $item->getItemText(); ?></li>
+    <?php endforeach; ?>
+</ul>
